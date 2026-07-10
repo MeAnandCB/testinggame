@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Test — Presentation Mode</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Ambient background grid (evokes exam-paper / aptitude-test texture) -->
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+
+<a class="back-link" href="../index.html">&larr; Arena</a>
+
+<!-- ============================= -->
+<!-- SCREEN 1 : HOME               -->
+<!-- ============================= -->
+<section id="screen-home" class="screen screen--active">
+  <div class="home-card glass">
+    <p class="eyebrow">Classroom Competition</p>
+    <h1 class="app-title">Memory Test</h1>
+    <p class="app-subtitle">Show the memory board, count down, then quiz the room — all from one screen.</p>
+
+    <div class="timer-select" role="group" aria-label="Select memorisation time">
+      <button class="timer-chip" data-time="20">20<span>sec</span></button>
+      <button class="timer-chip timer-chip--active" data-time="40">40<span>sec</span></button>
+      <button class="timer-chip" data-time="60">60<span>sec</span></button>
+    </div>
+
+    <button id="btn-start" class="btn btn--primary btn--xl">
+      <span>Start Test</span>
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+    </button>
+
+    <button id="btn-fullscreen-home" class="btn btn--ghost">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+      Full Screen
+    </button>
+
+    <p class="kbd-hint">Shortcut: <kbd>F</kbd> Full screen</p>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- SCREEN 2 : MEMORY (STUDY)     -->
+<!-- ============================= -->
+<section id="screen-memory" class="screen">
+  <div class="memory-topbar">
+    <p class="phase-label">Memorise the board</p>
+    <div class="ring-timer" id="ring-timer">
+      <svg viewBox="0 0 120 120">
+        <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+        <circle class="ring-progress" id="ring-progress" cx="60" cy="60" r="52"></circle>
+      </svg>
+      <span class="ring-number" id="memory-seconds">60</span>
+    </div>
+    <p class="phase-hint">No talking — eyes on the image</p>
+  </div>
+
+  <div class="memory-stage">
+    <img id="memory-image" src="memory.jpg" alt="Memory board to memorise" class="memory-image">
+    <div class="stage-shield" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- SCREEN 3 : QUESTION           -->
+<!-- ============================= -->
+<section id="screen-question" class="screen">
+  <header class="q-header">
+    <p class="phase-label">Tap a position to reveal its answer</p>
+    <div class="q-progress">
+      <span id="progress-text">0 of 12 revealed</span>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </header>
+
+  <div class="q-grid" id="q-grid"></div>
+
+  <div class="q-utility">
+    <button id="btn-fullscreen-q" class="btn btn--icon" title="Full screen (F)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    </button>
+    <button id="btn-restart" class="btn btn--icon" title="Restart test">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 5V2L8 6l4 4V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
+    </button>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

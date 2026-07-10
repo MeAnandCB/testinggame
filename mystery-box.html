@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Box Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#05060f;
+    --bg-mid:#0b0f24;
+    --panel:rgba(20,24,48,0.72);
+    --panel-border:rgba(255,255,255,0.12);
+    --violet:#7c5cff;
+    --cyan:#22d3ee;
+    --pink:#ff5da2;
+    --gold:#ffd166;
+    --text:#f1f3ff;
+    --muted:#a6acd9;
+    --good:#34d399;
+    --danger:#ff5d7a;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 60% 45% at 15% 10%, rgba(124,92,255,0.28), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 85% 15%, rgba(34,211,238,0.22), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(255,93,162,0.18), transparent 60%),
+      var(--bg-deep);
+    font-family:'JetBrains Mono', monospace;
+    color:var(--text);
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image: radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity:0.06;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .spark-field{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    overflow:hidden;
+  }
+
+  .spark{
+    position:absolute;
+    bottom:-20px;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 10px 3px currentColor;
+    animation-name:sparkRise;
+    animation-timing-function:ease-in;
+    animation-iteration-count:infinite;
+    opacity:0;
+  }
+
+  @keyframes sparkRise{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:0.9; }
+    80%{ opacity:0.45; }
+    100%{ transform:translateY(-100vh) translateX(var(--drift, 30px)); opacity:0; }
+  }
+
+  header{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding:56px 20px 24px;
+  }
+
+  .eyebrow{
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:999px;
+    background:rgba(124,92,255,0.16);
+    border:1px solid rgba(124,92,255,0.4);
+    letter-spacing:0.3em;
+    font-size:10px;
+    color:var(--cyan);
+    text-transform:uppercase;
+    margin:0 0 18px;
+    animation:flicker 3.2s ease-in-out infinite;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:800;
+    font-size:clamp(34px, 6.5vw, 58px);
+    margin:0;
+    letter-spacing:-0.01em;
+    background:linear-gradient(120deg, var(--gold), var(--pink) 35%, var(--violet) 65%, var(--cyan));
+    background-size:250% 250%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:titleSheen 6s ease-in-out infinite;
+    text-transform:uppercase;
+  }
+
+  @keyframes flicker{
+    0%, 100%{ opacity:1; }
+    45%{ opacity:0.7; }
+    50%{ opacity:1; }
+    52%{ opacity:0.55; }
+    55%{ opacity:1; }
+  }
+
+  @keyframes titleSheen{
+    0%, 100%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+  }
+
+  .tagline{
+    max-width:520px;
+    margin:16px auto 0;
+    font-size:13.5px;
+    line-height:1.7;
+    color:var(--muted);
+    letter-spacing:0.01em;
+  }
+
+  .tagline b{ color:var(--text); }
+
+  .back-link{
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:5;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 16px;
+    border:1px solid var(--panel-border);
+    background:var(--panel);
+    backdrop-filter:blur(10px);
+    color:var(--text);
+    font-family:inherit;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border-radius:999px;
+    transition:all 0.2s ease;
+  }
+  .back-link:hover{
+    background:linear-gradient(135deg, var(--violet), var(--pink));
+    border-color:transparent;
+    color:white;
+    transform:translateX(-3px);
+  }
+
+  .fullscreen-btn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:5;
+    width:38px;
+    height:38px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--panel-border);
+    background:var(--panel);
+    backdrop-filter:blur(10px);
+    color:var(--text);
+    border-radius:999px;
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+  .fullscreen-btn:hover{
+    background:linear-gradient(135deg, var(--violet), var(--cyan));
+    border-color:transparent;
+    color:#05060f;
+  }
+
+  .grid{
+    position:relative;
+    z-index:1;
+    max-width:960px;
+    margin:0 auto;
+    padding:24px 24px 100px;
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:22px;
+    perspective:900px;
+  }
+
+  @media (max-width:760px){
+    .grid{grid-template-columns:repeat(2, 1fr);}
+  }
+
+  .crate{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:20px;
+    background:
+      linear-gradient(160deg, rgba(124,92,255,0.22), rgba(34,211,238,0.08) 55%, rgba(255,93,162,0.14));
+    border:1px solid var(--panel-border);
+    backdrop-filter:blur(10px);
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.04);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+    outline-offset:3px;
+    animation:podFloat 4s ease-in-out infinite;
+    animation-delay:calc(var(--idx, 0) * 0.12s);
+  }
+
+  @keyframes podFloat{
+    0%, 100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-5px) rotate(-0.8deg); }
+  }
+
+  .crate:hover{
+    animation-play-state:paused;
+    transform:translateY(-10px) scale(1.06) rotateX(6deg);
+    border-color:rgba(124,92,255,0.55);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(124,92,255,0.4), 0 0 60px rgba(34,211,238,0.15);
+  }
+  .crate:active{ transform:translateY(-3px) scale(0.98); }
+  .crate:focus-visible{ outline:2px solid var(--gold); }
+
+  .crate::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background:radial-gradient(circle at 50% 20%, rgba(255,255,255,0.16), transparent 60%);
+    pointer-events:none;
+  }
+
+  .crate.bursting{
+    animation:crateBurst 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) forwards;
+    z-index:2;
+  }
+
+  @keyframes crateBurst{
+    0%{ transform:scale(1) rotate(0deg); filter:brightness(1); }
+    35%{ transform:scale(1.2) rotate(-4deg); filter:brightness(1.6) saturate(1.4); box-shadow:0 0 50px 14px rgba(124,92,255,0.6), 0 0 80px 20px rgba(34,211,238,0.35); }
+    60%{ transform:scale(0.9) rotate(3deg); }
+    100%{ transform:scale(1) rotate(0deg); filter:brightness(1); }
+  }
+
+  .crate-number{
+    position:relative;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:800;
+    font-size:34px;
+    background:linear-gradient(135deg, var(--gold), var(--pink));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    z-index:1;
+  }
+
+  .crate-label{
+    position:relative;
+    font-size:9px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    z-index:1;
+  }
+
+  .crate.opened{
+    background:linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    cursor:not-allowed;
+    opacity:0.45;
+    transform:none !important;
+    animation:none !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05) !important;
+  }
+  .crate.opened .crate-number{ background:linear-gradient(135deg, #6b6f8a, #4a4f6b); -webkit-background-clip:text; background-clip:text; }
+  .crate.opened .crate-label{ color:var(--danger); }
+
+  /* Overlay */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(4,5,14,0.82);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+    padding:20px;
+    overflow-y:auto;
+  }
+  .overlay.show{display:flex;}
+
+  .overlay.show::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle at 50% 45%, rgba(124,92,255,0.4), transparent 55%);
+    animation:flashBurst 0.6s ease-out forwards;
+    pointer-events:none;
+  }
+
+  @keyframes flashBurst{
+    0%{ opacity:1; transform:scale(0.6); }
+    100%{ opacity:0; transform:scale(1.6); }
+  }
+
+  .ticket-frame{
+    position:relative;
+    max-width:480px;
+    width:100%;
+    margin:auto;
+    border-radius:28px;
+    padding:2px;
+    background:conic-gradient(from 0deg, var(--violet), var(--cyan), var(--pink), var(--gold), var(--violet));
+    animation:spinBorder 5s linear infinite;
+    transform:scale(0.8) rotateX(-30deg) translateY(-14px);
+    opacity:0;
+    transform-origin:top center;
+    animation:spinBorder 5s linear infinite, unfurl 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes spinBorder{
+    to{ background-position:200% 0; }
+  }
+
+  @keyframes unfurl{
+    0%{ transform:scale(0.8) rotateX(-30deg) translateY(-14px); opacity:0; }
+    60%{ transform:scale(1.02) rotateX(4deg) translateY(2px); opacity:1; }
+    100%{ transform:scale(1) rotateX(0deg) translateY(0); opacity:1; }
+  }
+
+  .ticket{
+    position:relative;
+    background:linear-gradient(165deg, rgba(22,26,52,0.96), rgba(8,10,22,0.98));
+    color:var(--text);
+    border-radius:26px;
+    padding:38px 32px 30px;
+    overflow:hidden;
+  }
+
+  .ticket::after{
+    content:"";
+    position:absolute;
+    left:-20%;
+    top:-40%;
+    width:140%;
+    height:60%;
+    background:linear-gradient(200deg, rgba(255,255,255,0.12), transparent 60%);
+    transform:rotate(8deg);
+    animation:scanSweep 1.4s ease-out forwards;
+    pointer-events:none;
+  }
+
+  @keyframes scanSweep{
+    0%{ transform:translateY(-40%) rotate(8deg); opacity:0.9; }
+    100%{ transform:translateY(140%) rotate(8deg); opacity:0; }
+  }
+
+  .ticket h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:800;
+    font-size:26px;
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+  }
+
+  .ticket .found{
+    font-size:10.5px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:20px;
+  }
+
+  .contents{
+    list-style:none;
+    margin:0 0 6px;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .contents li{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 15px;
+    border-radius:14px;
+    background:linear-gradient(135deg, rgba(124,92,255,0.22), rgba(34,211,238,0.14));
+    border:1px solid rgba(255,255,255,0.14);
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--text);
+    box-shadow:0 4px 14px rgba(0,0,0,0.3);
+    opacity:0;
+    transform-origin:left center;
+    animation: stampIn 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .contents li span.idx{
+    font-size:9.5px;
+    padding:2px 6px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.14);
+    color:var(--gold);
+    font-weight:800;
+  }
+
+  @keyframes stampIn{
+    0%{ opacity:0; transform:translateX(-14px) scale(1.3) rotate(-3deg); }
+    60%{ opacity:1; transform:translateX(0) scale(1) rotate(1deg); }
+    100%{ opacity:1; transform:translateX(0) scale(1) rotate(0deg); }
+  }
+
+  /* Timer section inside ticket */
+  .timer-block{
+    margin-top:26px;
+    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,0.12);
+  }
+
+  .timer-mode{
+    font-size:10.5px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .timer-mode span:last-child{ color:var(--cyan); }
+
+  .timer-ring-wrap{
+    position:relative;
+    width:132px;
+    height:132px;
+    margin:0 auto 16px;
+    display:grid;
+    place-items:center;
+  }
+
+  .timer-ring{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    transform:rotate(-90deg);
+  }
+
+  .ring-track{
+    fill:none;
+    stroke:rgba(255,255,255,0.1);
+    stroke-width:7;
+  }
+
+  .ring-fill{
+    fill:none;
+    stroke:url(#ringGradient);
+    stroke-width:7;
+    stroke-linecap:round;
+    transition:stroke-dashoffset 1s linear;
+  }
+
+  .timer-display{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:800;
+    font-size:34px;
+    text-align:center;
+    letter-spacing:0.5px;
+    color:var(--text);
+    transition:color 0.2s ease;
+  }
+
+  .timer-display.warn{ color:var(--danger); animation:urgentPulse 0.8s ease-in-out infinite; }
+  .ring-fill.warn{ stroke:var(--danger); }
+
+  @keyframes urgentPulse{
+    0%, 100%{ transform:scale(1); }
+    50%{ transform:scale(1.1); }
+  }
+
+  .timer-controls{
+    display:flex;
+    gap:10px;
+  }
+
+  .timer-btn{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    font-family:inherit;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+  .timer-btn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .timer-btn:not(:disabled):hover{ transform:translateY(-2px); }
+
+  .timer-btn.next{ background:linear-gradient(135deg, var(--violet), var(--pink)); color:white; box-shadow:0 8px 20px rgba(124,92,255,0.3); }
+
+  .timer-status{
+    text-align:center;
+    font-size:12px;
+    margin-top:14px;
+    color:var(--muted);
+    min-height:16px;
+  }
+
+  .close-btn{
+    margin-top:22px;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--text);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    font-family:inherit;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+  .close-btn:hover{ background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.3); }
+  .close-btn:focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; }
+
+  footer{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding:0 20px 50px;
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:0.1em;
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c5cff"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#ffd166"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<a class="back-link" href="index.html">&larr; Arena</a>
+<button class="fullscreen-btn" id="fullscreenBtn" title="Full screen" aria-label="Toggle full screen">
+  <svg viewBox="0 0 24 24" width="17" height="17"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+</button>
+
+<header>
+  <p class="eyebrow">Team Challenge &middot; Live Round</p>
+  <h1>Mystery Box Challenge</h1>
+  <p class="tagline"><b>Open the Box. Connect the Words. Tell the Story.</b><br>Pick a vault pod, get 6 random words, and build a story your team can pitch in two minutes.</p>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<div class="overlay" id="overlay">
+  <div class="ticket-frame">
+    <div class="ticket" id="ticket">
+      <h2 id="ticketTitle">Box 1</h2>
+      <p class="found">Your six words &mdash; use all of them</p>
+      <ul class="contents" id="ticketList"></ul>
+
+      <div class="timer-block">
+        <div class="timer-mode"><span id="timerModeLabel">Prep Time</span><span id="timerModeSub">2:00 to plan</span></div>
+        <div class="timer-ring-wrap">
+          <svg class="timer-ring" viewBox="0 0 120 120">
+            <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+            <circle class="ring-fill" id="timerRingFill" cx="60" cy="60" r="52"></circle>
+          </svg>
+          <span class="timer-display" id="timerDisplay">2:00</span>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn next" id="nextBtn">Skip to Presentation</button>
+        </div>
+        <p class="timer-status" id="timerStatus"></p>
+      </div>
+
+      <button class="close-btn" id="closeBtn">Seal it back up</button>
+    </div>
+  </div>
+</div>
+
+<footer>10 vault pods &middot; one shot each &middot; click a box to claim it for your team</footer>
+
+<script>
+  const data = {
+    1: ["Bug","Coffee","Laptop","Rain","Deadline","Victory"],
+    2: ["Tester","Robot","Password","Moon","Chocolate","Alarm"],
+    3: ["Selenium","Dragon","Mobile","Treasure","Error","Teamwork"],
+    4: ["Login","Elephant","Database","Mirror","Email","Success"],
+    5: ["Mobile","Train","Chocolate","Tester","Bridge","Surprise"],
+    6: ["Doctor","Keyboard","Forest","Email","Treasure","Rainbow"],
+    7: ["Selenium","Bicycle","Pizza","Mirror","Airport","Secret"],
+    8: ["Login","Candle","River","Monkey","Exam","Smile"],
+    9: ["Helmet","Bug Report","Coffee","Desert","Magic","Confidence"],
+    10: ["Test Case","Umbrella","Guitar","Hospital","Rocket","Dream"]
+  };
+
+  const grid = document.getElementById('grid');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  fullscreenBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  const overlay = document.getElementById('overlay');
+  const ticketTitle = document.getElementById('ticketTitle');
+  const ticketList = document.getElementById('ticketList');
+  const closeBtn = document.getElementById('closeBtn');
+
+  const timerModeLabel = document.getElementById('timerModeLabel');
+  const timerModeSub = document.getElementById('timerModeSub');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const timerRingFill = document.getElementById('timerRingFill');
+  const nextBtn = document.getElementById('nextBtn');
+  const timerStatus = document.getElementById('timerStatus');
+
+  const RING_CIRCUMFERENCE = 2 * Math.PI * 52;
+  timerRingFill.style.strokeDasharray = `${RING_CIRCUMFERENCE}`;
+
+  const openedSet = new Set();
+  const PREP_SECONDS = 120;
+  const PRESENT_SECONDS = 120;
+
+  let interval = null;
+  let remaining = PREP_SECONDS;
+  let mode = 'prep'; // 'prep' | 'present'
+
+  for (let i = 1; i <= 10; i++){
+    const crate = document.createElement('button');
+    crate.className = 'crate';
+    crate.id = 'crate-' + i;
+    crate.style.setProperty('--idx', i);
+    crate.setAttribute('type','button');
+    crate.setAttribute('aria-label', 'Claim Box ' + i);
+    crate.innerHTML = `
+      <div class="crate-number">${i}</div>
+      <div class="crate-label">Sealed</div>
+    `;
+    crate.addEventListener('click', () => openBox(i, crate));
+    grid.appendChild(crate);
+  }
+
+  function spawnSparks(){
+    const field = document.createElement('div');
+    field.className = 'spark-field';
+    const colors = ['#22d3ee', '#7c5cff', '#ff5da2', '#ffd166'];
+    for (let i = 0; i < 30; i += 1){
+      const spark = document.createElement('span');
+      spark.className = 'spark';
+      spark.style.left = Math.random() * 100 + '%';
+      spark.style.color = colors[Math.floor(Math.random() * colors.length)];
+      spark.style.background = 'currentColor';
+      spark.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+      spark.style.animationDuration = (5 + Math.random() * 6) + 's';
+      spark.style.animationDelay = (Math.random() * 8) + 's';
+      field.appendChild(spark);
+    }
+    document.body.prepend(field);
+  }
+  spawnSparks();
+
+  function setRingProgress(remainingSeconds, totalSeconds){
+    const pct = remainingSeconds / totalSeconds;
+    timerRingFill.style.strokeDashoffset = `${RING_CIRCUMFERENCE * (1 - pct)}`;
+  }
+
+  function resetTimerUI(){
+    clearInterval(interval);
+    interval = null;
+    mode = 'prep';
+    remaining = PREP_SECONDS;
+    timerModeLabel.textContent = 'Prep Time';
+    timerModeSub.textContent = '2:00 to plan';
+    timerDisplay.textContent = formatTime(remaining);
+    timerDisplay.classList.remove('warn');
+    timerRingFill.classList.remove('warn');
+    setRingProgress(remaining, PREP_SECONDS);
+    nextBtn.disabled = false;
+    nextBtn.textContent = 'Skip to Presentation';
+    timerStatus.textContent = 'Discuss and build your story.';
+    interval = setInterval(tick, 1000);
+  }
+
+  function formatTime(s){
+    const m = Math.floor(s/60);
+    const sec = s % 60;
+    return m + ':' + String(sec).padStart(2,'0');
+  }
+
+  function openBox(num, el){
+    if (openedSet.has(num)){
+      timerStatus.textContent = '';
+      ticketTitle.textContent = 'Box ' + num;
+      ticketList.innerHTML = '';
+      showWords(num);
+      resetTimerUI();
+      overlay.classList.add('show');
+      return;
+    }
+
+    el.classList.add('bursting');
+    el.disabled = true;
+
+    setTimeout(() => {
+      openedSet.add(num);
+      el.classList.add('opened');
+      el.classList.remove('bursting');
+      el.querySelector('.crate-label').textContent = 'Claimed';
+
+      ticketTitle.textContent = 'Box ' + num;
+      ticketList.innerHTML = '';
+      showWords(num);
+      resetTimerUI();
+      overlay.classList.add('show');
+    }, 320);
+  }
+
+  function showWords(num){
+    data[num].forEach((item, idx) => {
+      const li = document.createElement('li');
+      li.style.animationDelay = (idx * 0.06) + 's';
+      li.innerHTML = `<span class="idx">${String(idx+1).padStart(2,'0')}</span> ${item}`;
+      ticketList.appendChild(li);
+    });
+  }
+
+  function tick(){
+    remaining--;
+    if (remaining < 0) remaining = 0;
+    timerDisplay.textContent = formatTime(remaining);
+
+    const total = mode === 'prep' ? PREP_SECONDS : PRESENT_SECONDS;
+    setRingProgress(remaining, total);
+
+    if (remaining <= 20){
+      timerDisplay.classList.add('warn');
+      timerRingFill.classList.add('warn');
+    }
+
+    if (remaining === 0){
+      clearInterval(interval);
+      interval = null;
+      if (mode === 'prep'){
+        startPresentPhase();
+      } else {
+        timerStatus.textContent = "Time's up! Story time is over.";
+        nextBtn.disabled = true;
+      }
+    }
+  }
+
+  function startPresentPhase(){
+    clearInterval(interval);
+    mode = 'present';
+    remaining = PRESENT_SECONDS;
+    timerModeLabel.textContent = 'Presentation Time';
+    timerModeSub.textContent = '2:00 to present';
+    timerDisplay.textContent = formatTime(remaining);
+    timerDisplay.classList.remove('warn');
+    timerRingFill.classList.remove('warn');
+    setRingProgress(remaining, PRESENT_SECONDS);
+    nextBtn.disabled = true;
+    timerStatus.textContent = 'Tell it with confidence!';
+    interval = setInterval(tick, 1000);
+  }
+
+  nextBtn.addEventListener('click', () => {
+    if (mode === 'prep') startPresentPhase();
+  });
+
+  function closeOverlay(){
+    overlay.classList.remove('show');
+    clearInterval(interval);
+    interval = null;
+  }
+
+  closeBtn.addEventListener('click', closeOverlay);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeOverlay(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape'){
+      closeOverlay();
+    }
+  });
+</script>
+
+</body>
+</html>

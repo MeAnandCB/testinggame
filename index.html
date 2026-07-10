@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QAOdyssey 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-one"></div>
+    <div class="bg-orb orb-two"></div>
+    <div class="bg-orb orb-three"></div>
+
+    <button class="fullscreen-toggle" id="fullscreen-btn" title="Full screen" aria-label="Toggle full screen">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    </button>
+
+    <main class="app-shell">
+      <section class="screen active" id="home-screen">
+        <div class="hero-card">
+          <h1>Game <span>Arena</span></h1>
+        </div>
+
+        <div class="games-grid">
+          <button class="game-card card-a" data-game="visual-iq">
+            <div class="card-glow"></div>
+            <span class="round-badge">Round 1</span>
+            <span class="card-icon">🧠</span>
+            <h3>Visual IQ Challenge</h3>
+          </button>
+
+          <button class="game-card card-b" data-game="bug-triage">
+            <div class="card-glow"></div>
+            <span class="round-badge">Round 2</span>
+            <span class="card-icon">🐞</span>
+            <h3>Bug Triage Challenge</h3>
+          </button>
+
+          <button class="game-card card-c" data-game="observe-recall">
+            <div class="card-glow"></div>
+            <span class="round-badge">Round 3</span>
+            <span class="card-icon">👀</span>
+            <h3>Observe &amp; Recall</h3>
+          </button>
+
+          <button class="game-card card-d" data-game="bug-hunt">
+            <div class="card-glow"></div>
+            <span class="round-badge">Round 4</span>
+            <span class="card-icon">🔍</span>
+            <h3>Bug Hunt Challenge</h3>
+          </button>
+
+          <button class="game-card card-e" data-game="decode-clues">
+            <div class="card-glow"></div>
+            <span class="round-badge">Round 5</span>
+            <span class="card-icon">🧩</span>
+            <h3>Decode the Clues</h3>
+          </button>
+
+          <button class="game-card card-f" data-game="mystery-box">
+            <div class="card-glow"></div>
+            <span class="round-badge">Round 6</span>
+            <span class="card-icon">📦</span>
+            <h3>Mystery Box Challenge</h3>
+          </button>
+        </div>
+      </section>
+
+      <section class="screen" id="detail-screen">
+        <div class="panel detail-panel">
+          <button class="ghost-btn" id="back-home"><span class="ghost-arrow">←</span>Back</button>
+          <div class="detail-visual" id="detail-visual">
+            <span id="detail-icon">⚡</span>
+          </div>
+          <h2 id="detail-title" class="cinematic-title">Game Name</h2>
+          <p id="detail-description">Game description</p>
+          <button class="primary-btn" id="next-step">Next</button>
+        </div>
+      </section>
+
+      <section class="screen" id="rules-screen">
+        <div class="panel rules-panel">
+          <button class="ghost-btn" id="back-detail"><span class="ghost-arrow">←</span>Back</button>
+          <p class="eyebrow">Mission Brief</p>
+          <h2 id="rules-title">Rules</h2>
+          <ul id="rules-list"></ul>
+          <div class="scoring-box" id="scoring-box"></div>
+          <button class="primary-btn" id="start-game">Start Game</button>
+        </div>
+      </section>
+
+      <section class="screen" id="game-screen">
+        <div class="panel game-panel">
+          <button class="ghost-btn" id="back-rules"><span class="ghost-arrow">←</span>Exit</button>
+          <div class="game-stage">
+            <p class="eyebrow">Now Playing</p>
+            <h2 id="game-title">Game Arena</h2>
+            <div class="game-card-large" id="game-stage-card">
+              <p id="game-message">Your challenge is ready. Let the sparks fly.</p>
+            </div>
+
+            <!-- Buzzer multiple-choice mode: Visual IQ (1), Observe & Recall (3) -->
+            <div class="buzzer-stage" id="mode-buzzer-mc">
+              <div class="round-indicator">
+                Round <span id="mc-round-current">1</span> / <span id="mc-round-total">5</span>
+              </div>
+
+              <div class="memorize-block" id="memorize-block">
+                <div class="visual-spotlight memorize-visual" id="memorize-visual">🖼️</div>
+                <p class="memorize-copy">Memorize every detail. Questions start when the timer ends.</p>
+                <div class="timer-ring-wrap">
+                  <svg class="timer-ring" viewBox="0 0 100 100">
+                    <circle class="timer-ring-track" cx="50" cy="50" r="46"></circle>
+                    <circle class="timer-ring-fill" id="memorize-ring-fill" cx="50" cy="50" r="46"></circle>
+                  </svg>
+                  <span class="timer-value" id="memorize-time">20</span>
+                </div>
+              </div>
+
+              <div class="question-block" id="mc-question-block">
+                <div class="visual-spotlight" id="visual-spotlight">🔍</div>
+                <h3 id="challenge-question">Observe the visual carefully.</h3>
+                <div class="choice-grid" id="choice-grid">
+                  <button class="choice-btn" data-correct="false">A · ★</button>
+                  <button class="choice-btn" data-correct="true">B · ✦</button>
+                  <button class="choice-btn" data-correct="false">C · ☀</button>
+                </div>
+                <div class="action-row" id="mc-buzzer-row">
+                  <button class="buzz-btn" id="buzz-btn">
+                    <svg class="buzz-ring-svg" viewBox="0 0 64 64">
+                      <circle class="buzz-ring-track" cx="32" cy="32" r="28"></circle>
+                      <circle class="buzz-ring-fill" id="buzz-ring-fill" cx="32" cy="32" r="28"></circle>
+                    </svg>
+                    <span class="buzz-label" id="buzz-label">Press Buzzer</span>
+                  </button>
+                  <button class="secondary-btn" id="pass-btn">Pass</button>
+                </div>
+                <div class="action-row" id="mc-pick-row" style="display:none;">
+                  <button class="primary-btn" id="mc-reveal-btn">Reveal Answer</button>
+                  <button class="primary-btn" id="mc-next-btn" style="display:none;">Next Question</button>
+                </div>
+                <p id="status-text">Buzz when you are sure and answer within 5 seconds.</p>
+                <div class="score-row">
+                  <span>Score</span>
+                  <strong id="score-value">0</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Buzzer clue-reveal mode: Decode the Clues (5) -->
+            <div class="buzzer-stage" id="mode-buzzer-clue">
+              <div class="round-indicator">
+                Question <span id="clue-round-current">1</span> / <span id="clue-round-total">4</span>
+              </div>
+              <div class="clue-stack" id="clue-stack"></div>
+              <div class="action-row">
+                <button class="primary-btn" id="clue-reveal-btn">Reveal Next Clue</button>
+                <button class="primary-btn" id="clue-answer-btn" style="display:none;">Reveal Answer</button>
+              </div>
+              <button class="secondary-btn" id="clue-next-btn" style="display:none;">Next Question</button>
+              <p id="clue-status-text">Reveal clues one at a time. The answer unlocks after the final clue.</p>
+            </div>
+
+            <!-- Team timer mode: Bug Triage (2) -->
+            <div class="buzzer-stage" id="mode-team-timer">
+              <div class="round-indicator">
+                Scenario <span id="triage-round-current">1</span> / <span id="triage-round-total">5</span>
+              </div>
+              <div class="scenario-card" id="scenario-card">Loading scenario…</div>
+              <div class="timer-ring-wrap timer-ring-wrap-inline">
+                <svg class="timer-ring" viewBox="0 0 100 100">
+                  <circle class="timer-ring-track" cx="50" cy="50" r="46"></circle>
+                  <circle class="timer-ring-fill" id="triage-ring-fill" cx="50" cy="50" r="46"></circle>
+                </svg>
+                <span class="timer-value" id="triage-time">30</span>
+              </div>
+              <div class="picker-row">
+                <p class="picker-label">Severity</p>
+                <div class="pill-row" id="severity-row">
+                  <button class="pill-btn" data-value="Critical">Critical</button>
+                  <button class="pill-btn" data-value="Major">Major</button>
+                  <button class="pill-btn" data-value="Minor">Minor</button>
+                  <button class="pill-btn" data-value="Trivial">Trivial</button>
+                </div>
+              </div>
+              <div class="picker-row">
+                <p class="picker-label">Priority</p>
+                <div class="pill-row" id="priority-row">
+                  <button class="pill-btn" data-value="High">High</button>
+                  <button class="pill-btn" data-value="Medium">Medium</button>
+                  <button class="pill-btn" data-value="Low">Low</button>
+                </div>
+              </div>
+              <button class="primary-btn triage-submit" id="triage-submit-btn">Lock In Answer</button>
+              <button class="secondary-btn triage-reveal" id="triage-reveal-btn" style="display:none;">Reveal Answer</button>
+              <button class="primary-btn triage-submit" id="triage-next-btn" style="display:none;">Next Question</button>
+              <p id="triage-status-text">Choose Severity and Priority, then lock in before time runs out.</p>
+              <div class="score-row">
+                <span>Score</span>
+                <strong id="triage-score-value">0</strong>
+              </div>
+            </div>
+
+            <!-- Task timer mode: Bug Hunt (4) -->
+            <div class="buzzer-stage" id="mode-task-timer">
+              <div class="round-indicator" id="bughunt-phase-label">Observation Phase</div>
+              <div class="mini-site" id="mini-site">
+                <div class="mini-site-bar">
+                  <span></span><span></span><span></span>
+                  <p class="mini-site-url">quikkart.example</p>
+                </div>
+                <img class="mini-site-image" src="bughunt/bug.png" alt="QuikKart product page" />
+              </div>
+              <div class="timer-ring-wrap timer-ring-wrap-xl" id="bughunt-timer-wrap">
+                <svg class="timer-ring" viewBox="0 0 100 100">
+                  <circle class="timer-ring-track" cx="50" cy="50" r="46"></circle>
+                  <circle class="timer-ring-fill" id="bughunt-ring-fill" cx="50" cy="50" r="46"></circle>
+                </svg>
+                <span class="timer-value" id="bughunt-time">2:00</span>
+              </div>
+              <p id="bughunt-status-text">Observe the site closely — you have 2 minutes.</p>
+              <button class="secondary-btn" id="bughunt-next-btn">Next: Discussion →</button>
+              <button class="primary-btn" id="report-submit-btn" style="display:none;">Done</button>
+              <div class="report-done" id="report-done">
+                <span class="game-over-icon">📋</span>
+                <p>Report submitted! Hand it to the Quiz Master for scoring.</p>
+                <button class="secondary-btn" id="bughunt-restart-btn">Run Again</button>
+              </div>
+            </div>
+
+            <div class="game-over-card" id="game-over-card">
+              <span class="game-over-icon">🏆</span>
+              <h3 id="game-over-title">Round Cleared!</h3>
+              <p id="final-score-label">Final score</p>
+              <strong id="final-score">0</strong>
+              <button class="primary-btn" id="play-again-btn">Play Again</button>
+            </div>
+            <div class="confetti-layer" id="confetti-layer"></div>
+
+            <div class="answer-modal-overlay" id="clue-answer-overlay">
+              <div class="answer-modal-card">
+                <span class="answer-modal-icon">💡</span>
+                <p class="answer-modal-eyebrow">The Answer Is</p>
+                <h3 class="answer-modal-text" id="clue-answer-text">—</h3>
+                <div class="answer-modal-actions">
+                  <button class="secondary-btn" id="clue-answer-close-btn">Close</button>
+                  <button class="primary-btn" id="clue-answer-next-btn">Next Question</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
