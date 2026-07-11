@@ -6,11 +6,15 @@ const gameData = {
     tags: ['Buzzer Mode', 'Fast Recall', 'Visual Detail'],
     mode: 'buzzer-mc',
     rules: [
-      'A visual (logo, symbol, icon, or image comparison) is displayed on the main screen.',
-      'All teams carefully observe the visual as soon as it appears.',
-      'The Quiz Master asks a question related to the displayed visual.',
-      'Teams press the buzzer as soon as they know the answer — first buzz gets the opportunity.',
-      'After buzzing, the team has 5 seconds to respond. Only one answer per buzzer attempt.',
+      'A visual (logo, symbol, icon, or image comparison) will be displayed on the main screen.',
+      'All teams must carefully observe the visual as soon as it appears.',
+      'The Quiz Master will ask a question related to the displayed visual.',
+      'Teams can press the buzzer as soon as they know the correct answer.',
+      'The first team to press the buzzer gets the opportunity to answer.',
+      'After buzzing, the team has 5 seconds to respond.',
+      'Only one answer is allowed per buzzer attempt.',
+      'No discussion with other teams or use of mobile phones is allowed during the round.',
+      "The Quiz Master's decision regarding answers and scoring will be final.",
     ],
     scoring: [
       '✅ Correct answer on the first attempt — 10 Points',
@@ -26,11 +30,16 @@ const gameData = {
     tags: ['Team Decision', '30s Clock', 'QA Judgement'],
     mode: 'team-timer',
     rules: [
-      'Each team is presented with one bug scenario.',
-      'The team has 30 seconds to discuss and respond.',
-      'The team must provide both a Severity (Critical, Major, Minor, Trivial) and a Priority (High, Medium, Low).',
-      'Only one final answer is allowed per scenario.',
-      'If the team fails to answer in time, the scenario is passed to the next team.',
+      'Each team will be presented with one bug scenario.',
+      'Once the scenario is displayed, the team has 30 seconds to discuss and respond.',
+      'The team must provide a Severity (Critical, Major, Minor, or Trivial) and a Priority (High or Low).',
+      'Only one final answer is allowed from each team.',
+      'If the team fails to answer within 30 seconds, the question will be passed to the next team.',
+      "If the team's answer is incorrect, the same scenario will also be passed to the next team.",
+      'The next team gets one opportunity to answer the passed question.',
+      'No hints or partial answers will be provided by the Quiz Master.',
+      'Once the correct answer is revealed or all eligible teams have attempted the question, the game proceeds to the next scenario.',
+      "The Quiz Master's decision regarding the correct classification and scoring will be final.",
     ],
     scoring: [
       '✅ Correct answer by the original team — 10 Points',
@@ -46,11 +55,15 @@ const gameData = {
     tags: ['Memory', 'Buzzer Mode', 'Detail Focus'],
     mode: 'buzzer-mc',
     rules: [
-      'A single image is displayed on the main screen for 20 seconds — memorize it.',
-      'Once the image disappears, questions related to it are asked one at a time.',
-      'Teams press the buzzer as soon as the question is displayed.',
-      'After buzzing, the team has 5 seconds to answer.',
-      'No notes, screenshots, or recordings are allowed while the image is displayed.',
+      'A single image will be displayed on the main screen for 20 seconds (or 40 seconds, depending on the selected timer).',
+      'All teams must carefully observe and memorize the image.',
+      'Once the image disappears, questions related to the image will be asked one at a time.',
+      'Teams can press the buzzer as soon as the question is displayed.',
+      'The first team to press the buzzer gets the opportunity to answer.',
+      'After buzzing, the team has 5 seconds to give their answer.',
+      'Only one answer is allowed per buzzer attempt.',
+      'No notes, screenshots, photographs, or recordings are allowed while the image is displayed.',
+      "The Quiz Master's decision regarding answers and scoring will be final.",
     ],
     scoring: [
       '✅ Correct answer on the first attempt — 10 Points',
@@ -66,11 +79,16 @@ const gameData = {
     tags: ['Teamwork', 'Live Site Review', 'Reporting'],
     mode: 'task-timer',
     rules: [
-      'A website is displayed on the main screen for 2 minutes — divide responsibilities across the team.',
-      'Once observation time ends, the site is hidden.',
-      'Teams discuss findings and prepare a single Bug Report.',
-      'The report must include at least one Usability Issue, one Spelling/Grammar mistake, and one UX Issue.',
-      'Each defect needs a clear location and a brief description.',
+      'A website will be displayed on the main screen for 2 minutes.',
+      'During the observation time, all team members must actively participate by analyzing different parts of the website and identifying potential defects.',
+      'Teams are encouraged to divide responsibilities (e.g., one member checks spelling and grammar, another reviews usability, another focuses on UI/UX, etc.) to ensure maximum coverage.',
+      'Once the observation time ends, the website will no longer be visible.',
+      'Teams will be given time to discuss their findings and prepare a single Bug Report within 10 minutes.',
+      'Every team member should contribute to identifying defects, discussing observations, and preparing the final report.',
+      'The Bug Report must clearly describe each defect, including a brief description of the defect.',
+      'The report must include at least one Usability Issue, one Spelling/Grammar Mistake, and one User Experience (UX) Issue.',
+      "The Quiz Master will evaluate each team's Bug Report based on accuracy of the identified defects, clarity of the bug descriptions, completeness of the report, and team collaboration and participation.",
+      "The Quiz Master's decision regarding the identified defects and scoring will be final.",
     ],
     scoring: [
       '✅ Accuracy of identified defects',
@@ -87,11 +105,15 @@ const gameData = {
     tags: ['Deduction', 'Buzzer Mode', 'Clue Chain'],
     mode: 'buzzer-clue',
     rules: [
-      'The Quiz Master reveals one clue at a time for each question.',
-      'The answer may be a testing concept, company, movie, scientist, tool, or related topic.',
+      'The Quiz Master will reveal one clue at a time for each question.',
+      'Teams can discuss the clues among themselves before answering.',
       'Teams may press the buzzer as soon as they are confident about the answer.',
-      'After buzzing, the team has 5 seconds to respond. Only one answer per attempt.',
-      'Clues keep revealing until the correct answer is found or all clues are used.',
+      'The first team to press the buzzer gets the opportunity to answer.',
+      'After buzzing, the team has 5 seconds to respond.',
+      'Only one answer is allowed per buzzer attempt.',
+      'If the answer is incorrect or the team fails to answer within 5 seconds, the question will be passed to the next fastest team that has already buzzed. If no other team has buzzed, the Quiz Master will continue revealing the next clue and reopen the buzzer.',
+      'Clues will continue to be revealed until the correct answer is identified or all available clues have been used.',
+      "The Quiz Master's decision regarding answers and scoring will be final.",
     ],
     scoring: [
       '✅ Correct after Clue 1 — 20 Points',
@@ -109,11 +131,16 @@ const gameData = {
     tags: ['Creativity', 'Storytelling', 'Team Prep'],
     mode: 'mystery-box',
     rules: [
-      'Ten Mystery Boxes are on offer — each team selects one.',
-      'Opening the box reveals 6 random words.',
-      'The team has 2 minutes to prepare a story using all six words — no word may be omitted.',
-      'Words can be used in any order; make the story logical and original.',
-      'One team member presents the story within 2 minutes.',
+      'Ten Mystery Boxes will be displayed on the screen.',
+      'Each team will select one Mystery Box.',
+      'Once selected, the box will reveal 6 random words.',
+      'All team members must work together to create a meaningful and creative story using the revealed words.',
+      'Teams will have 2 minutes to discuss and prepare their story.',
+      'The story must include all six words. No word may be omitted.',
+      'Teams may use the words in any order and are encouraged to make the story interesting, logical, and original.',
+      'After the preparation time, one team member will present the story within 2 minutes.',
+      'No changes to the revealed words are allowed once the Mystery Box has been opened.',
+      "The Quiz Master's decision regarding scoring and judging will be final.",
     ],
     scoring: [
       '✅ Correct use of all six words',
@@ -178,67 +205,62 @@ const roundSets = {
 const bugScenarios = [
   {
     text: 'The CEO name is misspelled on the homepage during a product launch.',
-    severity: 'Minor',
+    severity: 'Trivial',
     priority: 'High',
   },
   {
-    text: 'The password is visible while typing.',
-    severity: 'Major',
-    priority: 'High',
-  },
-  {
-    text: 'An ATM dispenses cash but does not deduct the amount from the account.',
+    text: 'Cart amount becomes double before checkout.',
     severity: 'Critical',
     priority: 'High',
   },
   {
-    text: 'The New Year offer banner is still visible in July.',
-    severity: 'Minor',
-    priority: 'Low',
+    text: 'ATM gives cash but account balance is not reduced.',
+    severity: 'Critical',
+    priority: 'High',
   },
   {
-    text: 'The notification icon has the wrong color.',
+    text: 'Company logo is slightly misplaced on the website.',
     severity: 'Trivial',
     priority: 'Low',
   },
   {
-    text: 'A ride-sharing app charges a customer twice for one ride.',
+    text: 'Notification icon has the wrong color.',
+    severity: 'Trivial',
+    priority: 'Low',
+  },
+  {
+    text: 'Chat message is delivered to the wrong person.',
     severity: 'Critical',
     priority: 'High',
   },
   {
-    text: 'An e-commerce site allows customers to buy expensive products for ₹1 due to a pricing bug.',
+    text: 'Clicking "Cancel Order" places the order instead.',
     severity: 'Critical',
     priority: 'High',
   },
   {
-    text: 'The help page has outdated text but the feature works correctly.',
+    text: 'Admin report shows a spelling mistake in one column name.',
     severity: 'Minor',
     priority: 'Low',
   },
   {
-    text: 'A messaging app sends a private message to the wrong contact.',
-    severity: 'Critical',
+    text: 'Help page has outdated text but the feature works correctly.',
+    severity: 'Minor',
+    priority: 'Low',
+  },
+  {
+    text: 'User can submit a form without entering required fields.',
+    severity: 'Major',
     priority: 'High',
   },
   {
-    text: 'The delete account button does not work.',
+    text: 'Delete account button does not work.',
     severity: 'Major',
-    priority: 'Medium',
-  },
-  {
-    text: "Anyone can access another user's account by changing the user ID in the URL.",
-    severity: 'Critical',
     priority: 'High',
   },
   {
     text: 'Search results show unrelated products.',
     severity: 'Major',
-    priority: 'Medium',
-  },
-  {
-    text: 'A payment app shows "Payment Failed," but the money is actually transferred.',
-    severity: 'Critical',
     priority: 'High',
   },
   {
@@ -247,17 +269,12 @@ const bugScenarios = [
     priority: 'High',
   },
   {
-    text: 'The OTP arrives 30 minutes after it was requested.',
-    severity: 'Major',
-    priority: 'High',
+    text: 'Company logo is slightly misplaced on the website.',
+    severity: 'Trivial',
+    priority: 'Low',
   },
   {
-    text: 'A game gives unlimited in-game currency because of a reward bug.',
-    severity: 'Major',
-    priority: 'Medium',
-  },
-  {
-    text: "A banking app displays another customer's account details after login.",
+    text: "User can see another customer's personal details after login.",
     severity: 'Critical',
     priority: 'High',
   },
@@ -373,7 +390,6 @@ const detailTitle = document.getElementById('detail-title');
 const detailDescription = document.getElementById('detail-description');
 const rulesTitle = document.getElementById('rules-title');
 const rulesList = document.getElementById('rules-list');
-const scoringBox = document.getElementById('scoring-box');
 const gameTitle = document.getElementById('game-title');
 const gameMessage = document.getElementById('game-message');
 const gameStageCard = document.getElementById('game-stage-card');
@@ -1049,7 +1065,6 @@ function openGame(gameKey) {
   detailTitle.classList.add('cinematic-title');
   rulesTitle.textContent = `${data.title} Rules`;
   rulesList.innerHTML = data.rules.map((rule) => `<li>${rule}</li>`).join('');
-  scoringBox.innerHTML = `<p class="scoring-title">Scoring</p>${data.scoring.map((line) => `<p class="scoring-line">${line}</p>`).join('')}`;
   gameTitle.textContent = data.title;
   gameMessage.textContent = data.message;
 

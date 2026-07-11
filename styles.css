@@ -437,28 +437,6 @@ h1 span {
   line-height: 1.8;
 }
 
-.scoring-box {
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.scoring-title {
-  margin: 0 0 8px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #86f6ff;
-}
-
-.scoring-line {
-  margin: 4px 0;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
 .game-stage {
   position: relative;
   display: grid;
