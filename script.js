@@ -983,6 +983,14 @@ const reportSubmitBtn = document.getElementById('report-submit-btn');
 const reportDone = document.getElementById('report-done');
 const bughuntRestartBtn = document.getElementById('bughunt-restart-btn');
 const bughuntNextBtn = document.getElementById('bughunt-next-btn');
+const bughuntFullscreenBtn = document.getElementById('bughunt-fullscreen-btn');
+
+let bughuntObservationEndTime = 0;
+
+bughuntFullscreenBtn.addEventListener('click', () => {
+  const remaining = Math.max(0, Math.round((bughuntObservationEndTime - Date.now()) / 1000));
+  window.open(`buggy-shop.html?seconds=${remaining}`, '_blank', 'noopener');
+});
 
 function openTaskTimer() {
   hideGameOver();
@@ -999,6 +1007,7 @@ function startObservationPhase() {
   bughuntStatusText.textContent = 'Observe the site closely — you have 2 minutes.';
   bughuntNextBtn.style.display = '';
   reportSubmitBtn.style.display = 'none';
+  bughuntObservationEndTime = Date.now() + 120000;
 
   startCountdown({
     seconds: 120,

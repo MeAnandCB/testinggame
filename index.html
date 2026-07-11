@@ -208,12 +208,13 @@
             <!-- Task timer mode: Bug Hunt (4) -->
             <div class="buzzer-stage" id="mode-task-timer">
               <div class="round-indicator" id="bughunt-phase-label">Observation Phase</div>
-              <div class="mini-site" id="mini-site">
-                <div class="mini-site-bar">
-                  <span></span><span></span><span></span>
-                  <p class="mini-site-url">quikkart.example</p>
-                </div>
-                <img class="mini-site-image" src="bughunt/bug.png" alt="QuikKart product page" />
+              <div class="site-launch-card" id="mini-site">
+                <span class="site-launch-icon">🌐</span>
+                <p class="site-launch-url">quikkart.example</p>
+                <button class="primary-btn site-launch-btn" id="bughunt-fullscreen-btn">
+                  <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                  Open Website
+                </button>
               </div>
               <div class="timer-ring-wrap timer-ring-wrap-xl" id="bughunt-timer-wrap">
                 <svg class="timer-ring" viewBox="0 0 100 100">

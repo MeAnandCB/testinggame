@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuickKart - Onlien Shoping Store</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background: #fefefe;
+    color: #444;
+  }
+
+  /* ---- HEADER (misaligned, inconsistent) ---- */
+  header {
+    background: #2b6cb0;
+    padding: 6px 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .logo {
+    color: #ffe08a;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    margin-top: 14px;
+  }
+  nav {
+    margin-top: 2px;
+  }
+  nav a {
+    color: #cfe3ff;
+    text-decoration: underline;
+    margin-right: 6px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+  }
+  nav a:nth-child(2) { font-size: 20px; color: #ffffff; font-family: Arial; }
+  nav a:nth-child(4) { font-size: 9px; }
+
+  .search-row {
+    display: flex;
+    margin: 4px 0 0 0;
+  }
+  .search-row input {
+    width: 120px;
+    padding: 2px;
+    font-size: 10px;
+  }
+  /* no search button on purpose */
+
+  .cart-icon {
+    color: white;
+    font-size: 14px;
+    margin-top: 18px;
+  }
+
+  /* ---- HERO / BANNER ---- */
+  .hero {
+    background: #ffd166;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .hero h1 {
+    font-size: 34px;
+    color: #7a4b00;
+    margin: 0 0 10px 0;
+  }
+  .hero p {
+    font-size: 13px;
+    color: #7a4b00;
+  }
+
+  .popup-ad {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: red;
+    color: yellow;
+    padding: 14px;
+    font-weight: bold;
+    font-size: 18px;
+    border: 3px dashed black;
+    transform: rotate(-4deg);
+    z-index: 999;
+  }
+
+  /* ---- BREADCRUMB (wrong / broken) ---- */
+  .breadcrumb {
+    padding: 6px 20px;
+    font-size: 11px;
+    color: #999;
+  }
+
+  /* ---- PRODUCT GRID (inconsistent sizes, misaligned) ---- */
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 20px;
+  }
+  .card {
+    width: 200px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  .card:nth-child(2) { width: 260px; padding: 4px; }
+  .card:nth-child(3) { width: 150px; margin-top: 25px; }
+  .card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+  .card:nth-child(2) img { height: 200px; }
+  .card h3 {
+    font-size: 15px;
+    color: #333;
+  }
+  .price {
+    color: #2b2b2b;
+    font-size: 11px;
+  }
+  .old-price {
+    text-decoration: line-through;
+    color: #aaa;
+    font-size: 10px;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .btn-add {
+    background: #38a169;
+    color: white;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+  .btn-add2 {
+    background: #6b46c1;
+    color: #eee2ff;
+    font-size: 17px;
+    border-radius: 0;
+    text-transform: uppercase;
+  }
+  .btn-add3 {
+    background: #ffffff;
+    color: #f0f0f0; /* low contrast on purpose */
+    border: 1px solid #eee;
+    font-size: 9px;
+  }
+
+  .stock-out {
+    color: #d00;
+    font-size: 10px;
+  }
+
+  /* ---- NEWSLETTER FORM (no labels, tiny targets) ---- */
+  .newsletter {
+    background: #edf2f7;
+    padding: 18px;
+    text-align: center;
+  }
+  .newsletter input {
+    padding: 3px;
+    width: 140px;
+  }
+  .newsletter .btn-sub {
+    background: #ecc94b;
+    color: #fffbe0;
+    border: none;
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+
+  /* ---- CHECKOUT / QTY ---- */
+  .qty-box {
+    padding: 20px;
+  }
+  .qty-box input {
+    width: 40px;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: #1a202c;
+    color: #4a5568; /* very low contrast against dark bg */
+    font-size: 10px;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  footer a {
+    color: #4a5568;
+    margin-right: 10px;
+  }
+
+  .contact-form label {
+    display: none; /* labels hidden - accessibility issue */
+  }
+  .contact-form input, .contact-form textarea {
+    display: block;
+    margin-bottom: 6px;
+    padding: 4px;
+  }
+
+  /* ---- Floating observation timer (injected for Bug Hunt round) ---- */
+  #obs-timer-badge {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(10, 12, 26, 0.88);
+    color: #ffe066;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+  }
+  #obs-timer-badge .obs-timer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #b4bddc;
+  }
+  #obs-timer-badge.obs-timer-warn { color: #ff5d5d; }
+  #obs-timer-badge.obs-timer-done { color: #7fae6f; }
+</style>
+</head>
+<body>
+
+<div id="obs-timer-badge" style="display:none;">
+  <span class="obs-timer-label">Time left</span>
+  <span id="obs-timer-value">2:00</span>
+</div>
+
+<header>
+  <div class="logo">QuikKart</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">SHOP NOW!!</a>
+    <a href="#">about us</a>
+    <a href="#">contuct</a>
+    <div class="search-row">
+      <input type="text" placeholder="Serach products...">
+    </div>
+  </nav>
+  <div class="cart-icon">🛒 Cart</div>
+</header>
+
+<section class="hero">
+  <div class="popup-ad">⚡ MEGA SALE!! Dont Miss Out!! ⚡</div>
+  <h1>Welcome to QuickKart - Best Prices Gaurenteed</h1>
+  <p>Their is huge discounts on all Item's today only. Free Shiping on order's above $50.</p>
+</section>
+
+<div class="breadcrumb">Home &gt; Electronics &gt; Mobiles &gt; Laptops</div>
+
+<section class="products">
+
+  <div class="card">
+    <img src="https://broken-image-link.example/does-not-exist.jpg" alt="">
+    <h3>Wireles Headphone's</h3>
+    <div class="price">$NaN</div>
+    <div class="old-price">$59.99</div>
+    <button class="btn btn-add">Add to Cart</button>
+  </div>
+
+  <div class="card">
+    <img src="https://broken-image-link.example/missing2.jpg" alt="">
+    <h3>Bluetooth Speeker - Waterproof</h3>
+    <div class="price">$34.99</div>
+    <button class="btn btn-add2">ADD TO BASKET</button>
+    <div class="stock-out">Out of stock</div>
+  </div>
+
+  <div class="card">
+    <img src="https://broken-image-link.example/missing3.jpg" alt="">
+    <h3>Smart Watch Pro</h3>
+    <div class="price">$89.99</div>
+    <button class="btn btn-add3">Buy Now</button>
+  </div>
+
+  <div class="card">
+    <img src="https://broken-image-link.example/missing4.jpg" alt="">
+    <h3>USB-C Charging Cabel (2m)</h3>
+    <div class="price">$9.99</div>
+    <button class="btn btn-add">add to cart</button>
+  </div>
+
+</section>
+
+<div class="qty-box">
+  <p>Quantity: <input type="number" value="1" min="-5"></p>
+  <p><a href="#">Click here</a> to procede to checkout.</p>
+</div>
+
+<section class="newsletter">
+  <p>Subscribe now to recieve exclusive offer's and updates!</p>
+  <input type="text" placeholder="Enter email">
+  <button class="btn-sub">Go</button>
+</section>
+
+<footer>
+  <div class="contact-form">
+    <form>
+      <label for="name">Name</label>
+      <input id="name" type="text">
+      <label for="email">Email</label>
+      <input id="email" type="text">
+      <label for="msg">Message</label>
+      <textarea id="msg" rows="2"></textarea>
+      <button class="btn btn-add" type="submit">Send</button>
+    </form>
+  </div>
+  <div>
+    <a href="#">Privacy Polocy</a>
+    <a href="#">Terms & Condtions</a>
+    <a href="#">FAQ's</a>
+    <a href="#">Retun Policy</a>
+  </div>
+  <div>© 2026 QuickKart Pvt Ltd. All Right's Reserved.</div>
+</footer>
+
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const seconds = parseInt(params.get('seconds'), 10);
+    if (!seconds || seconds <= 0) return; // no timer requested (opened outside the Bug Hunt round)
+
+    const badge = document.getElementById('obs-timer-badge');
+    const valueEl = document.getElementById('obs-timer-value');
+    badge.style.display = 'flex';
+
+    let remaining = seconds;
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return m + ':' + String(sec).padStart(2, '0');
+    }
+
+    function render() {
+      valueEl.textContent = formatTime(remaining);
+      badge.classList.toggle('obs-timer-warn', remaining > 0 && remaining <= 20);
+      badge.classList.toggle('obs-timer-done', remaining === 0);
+    }
+
+    render();
+    const interval = setInterval(() => {
+      remaining -= 1;
+      if (remaining <= 0) {
+        remaining = 0;
+        render();
+        valueEl.textContent = "Time's up!";
+        clearInterval(interval);
+        return;
+      }
+      render();
+    }, 1000);
+  })();
+</script>
+
+</body>
+</html>
