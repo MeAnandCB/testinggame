@@ -437,6 +437,26 @@ kbd{
 .grid-card:focus-visible{ outline:3px solid var(--cyan); outline-offset:3px; }
 .grid-card.is-locked{ cursor:default; }
 
+.grid-card.is-done .grid-card__face--front{
+  border-color: rgba(124,139,196,0.35);
+  opacity:.5;
+}
+.grid-card.is-done .grid-card__letter{
+  color: var(--text-dim);
+}
+.grid-card.is-done .grid-card__hint{
+  visibility:hidden;
+}
+.grid-card.is-done .grid-card__face--front::after{
+  content:"✓";
+  position:absolute;
+  top:8px;
+  right:10px;
+  font-size:14px;
+  font-weight:800;
+  color: var(--cyan);
+}
+
 .grid-card__inner{
   position:relative;
   width:100%;

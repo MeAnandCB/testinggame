@@ -173,11 +173,18 @@ function renderQuestionGrid(){
   });
 }
 
+const REVEAL_DURATION = 4000; // ms the answer stays visible before flipping back
+
 function revealCard(card){
-  if (card.classList.contains("is-locked")) return; // already flipped — cannot re-select
+  if (card.classList.contains("is-locked")) return; // already used — cannot re-select
   card.classList.add("is-flipped", "is-locked");
   state.revealedCount += 1;
   updateProgress();
+
+  setTimeout(() => {
+    card.classList.remove("is-flipped");
+    card.classList.add("is-done");
+  }, REVEAL_DURATION);
 }
 
 function updateProgress(){
