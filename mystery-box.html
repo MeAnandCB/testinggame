@@ -534,6 +534,60 @@
     min-height:16px;
   }
 
+  /* ---- Presentation overlay: big timer only ---- */
+  .present-overlay{ background:rgba(4,5,14,0.92); }
+
+  .present-stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+
+  .present-label{
+    font-size:13px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    font-weight:700;
+  }
+
+  .present-ring-wrap{
+    position:relative;
+    width:min(70vw, 340px);
+    height:min(70vw, 340px);
+    display:grid;
+    place-items:center;
+  }
+  .present-ring-wrap .timer-ring{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    transform:rotate(-90deg);
+  }
+  .present-ring-wrap .ring-track{ stroke-width:4; }
+  .present-ring-wrap .ring-fill{ stroke-width:4; }
+
+  .present-time{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:800;
+    font-size:min(16vw, 84px);
+    color:var(--text);
+  }
+  .present-time.warn{ color:var(--danger); animation:urgentPulse 0.8s ease-in-out infinite; }
+
+  .present-hint{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  .close-btn.present-close-btn{
+    width:auto;
+    margin-top:8px;
+    padding:12px 28px;
+  }
+
   .close-btn{
     margin-top:22px;
     width:100%;
@@ -616,6 +670,21 @@
   </div>
 </div>
 
+<div class="overlay present-overlay" id="presentOverlay">
+  <div class="present-stage">
+    <p class="present-label">Presenting Now</p>
+    <div class="present-ring-wrap">
+      <svg class="timer-ring" viewBox="0 0 120 120">
+        <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+        <circle class="ring-fill" id="presentRingFill" cx="60" cy="60" r="52"></circle>
+      </svg>
+      <span class="present-time" id="presentTimeDisplay">2:00</span>
+    </div>
+    <p class="present-hint">Tell your story with confidence!</p>
+    <button class="close-btn present-close-btn" id="presentCloseBtn">Done presenting</button>
+  </div>
+</div>
+
 <footer>10 vault pods &middot; one shot each &middot; click a box to claim it for your team</footer>
 
 <script>
@@ -654,16 +723,23 @@
   const nextBtn = document.getElementById('nextBtn');
   const timerStatus = document.getElementById('timerStatus');
 
+  const presentOverlay = document.getElementById('presentOverlay');
+  const presentRingFill = document.getElementById('presentRingFill');
+  const presentTimeDisplay = document.getElementById('presentTimeDisplay');
+  const presentCloseBtn = document.getElementById('presentCloseBtn');
+
   const RING_CIRCUMFERENCE = 2 * Math.PI * 52;
   timerRingFill.style.strokeDasharray = `${RING_CIRCUMFERENCE}`;
+  presentRingFill.style.strokeDasharray = `${RING_CIRCUMFERENCE}`;
 
   const openedSet = new Set();
   const PREP_SECONDS = 120;
   const PRESENT_SECONDS = 120;
 
   let interval = null;
+  let presentInterval = null;
   let remaining = PREP_SECONDS;
-  let mode = 'prep'; // 'prep' | 'present'
+  let presentRemaining = PRESENT_SECONDS;
 
   for (let i = 1; i <= 10; i++){
     const crate = document.createElement('button');
@@ -699,22 +775,21 @@
   }
   spawnSparks();
 
-  function setRingProgress(remainingSeconds, totalSeconds){
+  function setRingProgress(ringEl, remainingSeconds, totalSeconds){
     const pct = remainingSeconds / totalSeconds;
-    timerRingFill.style.strokeDashoffset = `${RING_CIRCUMFERENCE * (1 - pct)}`;
+    ringEl.style.strokeDashoffset = `${RING_CIRCUMFERENCE * (1 - pct)}`;
   }
 
   function resetTimerUI(){
     clearInterval(interval);
     interval = null;
-    mode = 'prep';
     remaining = PREP_SECONDS;
     timerModeLabel.textContent = 'Prep Time';
     timerModeSub.textContent = '2:00 to plan';
     timerDisplay.textContent = formatTime(remaining);
     timerDisplay.classList.remove('warn');
     timerRingFill.classList.remove('warn');
-    setRingProgress(remaining, PREP_SECONDS);
+    setRingProgress(timerRingFill, remaining, PREP_SECONDS);
     nextBtn.disabled = false;
     nextBtn.textContent = 'Skip to Presentation';
     timerStatus.textContent = 'Discuss and build your story.';
@@ -768,9 +843,7 @@
     remaining--;
     if (remaining < 0) remaining = 0;
     timerDisplay.textContent = formatTime(remaining);
-
-    const total = mode === 'prep' ? PREP_SECONDS : PRESENT_SECONDS;
-    setRingProgress(remaining, total);
+    setRingProgress(timerRingFill, remaining, PREP_SECONDS);
 
     if (remaining <= 20){
       timerDisplay.classList.add('warn');
@@ -780,33 +853,55 @@
     if (remaining === 0){
       clearInterval(interval);
       interval = null;
-      if (mode === 'prep'){
-        startPresentPhase();
-      } else {
-        timerStatus.textContent = "Time's up! Story time is over.";
-        nextBtn.disabled = true;
-      }
+      timerStatus.textContent = "Time's up! Tap Skip to Presentation when ready.";
+      nextBtn.textContent = 'Start Presentation';
     }
   }
 
   function startPresentPhase(){
     clearInterval(interval);
-    mode = 'present';
-    remaining = PRESENT_SECONDS;
-    timerModeLabel.textContent = 'Presentation Time';
-    timerModeSub.textContent = '2:00 to present';
-    timerDisplay.textContent = formatTime(remaining);
-    timerDisplay.classList.remove('warn');
-    timerRingFill.classList.remove('warn');
-    setRingProgress(remaining, PRESENT_SECONDS);
-    nextBtn.disabled = true;
-    timerStatus.textContent = 'Tell it with confidence!';
-    interval = setInterval(tick, 1000);
+    interval = null;
+    overlay.classList.remove('show');
+
+    presentRemaining = PRESENT_SECONDS;
+    presentTimeDisplay.textContent = formatTime(presentRemaining);
+    presentTimeDisplay.classList.remove('warn');
+    presentRingFill.classList.remove('warn');
+    setRingProgress(presentRingFill, presentRemaining, PRESENT_SECONDS);
+
+    presentOverlay.classList.add('show');
+
+    clearInterval(presentInterval);
+    presentInterval = setInterval(presentTick, 1000);
   }
 
-  nextBtn.addEventListener('click', () => {
-    if (mode === 'prep') startPresentPhase();
-  });
+  function presentTick(){
+    presentRemaining--;
+    if (presentRemaining < 0) presentRemaining = 0;
+    presentTimeDisplay.textContent = formatTime(presentRemaining);
+    setRingProgress(presentRingFill, presentRemaining, PRESENT_SECONDS);
+
+    if (presentRemaining <= 20){
+      presentTimeDisplay.classList.add('warn');
+      presentRingFill.classList.add('warn');
+    }
+
+    if (presentRemaining === 0){
+      clearInterval(presentInterval);
+      presentInterval = null;
+      presentOverlay.classList.remove('show'); // back to the box grid automatically
+    }
+  }
+
+  nextBtn.addEventListener('click', startPresentPhase);
+
+  function closePresentOverlay(){
+    clearInterval(presentInterval);
+    presentInterval = null;
+    presentOverlay.classList.remove('show');
+  }
+
+  presentCloseBtn.addEventListener('click', closePresentOverlay);
 
   function closeOverlay(){
     overlay.classList.remove('show');
@@ -820,6 +915,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape'){
       closeOverlay();
+      closePresentOverlay();
     }
   });
 </script>
