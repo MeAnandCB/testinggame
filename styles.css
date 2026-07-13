@@ -742,6 +742,38 @@ h1 span {
   stroke-width: 5;
 }
 
+.timer-ring-wrap-corner {
+  position: fixed;
+  top: 74px;
+  right: 20px;
+  z-index: 15;
+  width: 92px;
+  height: 92px;
+  margin: 0;
+  background: rgba(6, 8, 22, 0.85);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.timer-ring-wrap-corner .timer-value {
+  font-size: 1.15rem;
+}
+
+@media (max-width: 760px) {
+  .timer-ring-wrap-corner {
+    top: 66px;
+    right: 12px;
+    width: 76px;
+    height: 76px;
+  }
+
+  .timer-ring-wrap-corner .timer-value {
+    font-size: 0.95rem;
+  }
+}
+
 .timer-ring {
   position: absolute;
   inset: 0;
