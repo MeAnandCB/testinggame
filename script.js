@@ -2,6 +2,7 @@ const gameData = {
   'visual-iq': {
     title: 'Visual IQ Challenge',
     icon: '🧠',
+    image: 'game-names/round1-visual-iq.png',
     description: 'Spot the Real. Beat the Clock! Test your observation skills by identifying the correct symbol before the other teams.',
     tags: ['Buzzer Mode', 'Fast Recall', 'Visual Detail'],
     mode: 'buzzer-mc',
@@ -26,6 +27,7 @@ const gameData = {
   'bug-triage': {
     title: 'Bug Triage Challenge',
     icon: '🐞',
+    image: 'game-names/round2-bug-triage.png',
     description: 'Every Decision Matters. Evaluate a real-world bug scenario and determine the correct Severity and Priority.',
     tags: ['Team Decision', '30s Clock', 'QA Judgement'],
     mode: 'team-timer',
@@ -51,6 +53,7 @@ const gameData = {
   'observe-recall': {
     title: 'Observe & Recall',
     icon: '👀',
+    image: 'game-names/round3-observe-recall.png',
     description: 'Test your observation skills and memory by recalling details from an image within a limited time.',
     tags: ['Memory', 'Buzzer Mode', 'Detail Focus'],
     mode: 'buzzer-mc',
@@ -75,6 +78,7 @@ const gameData = {
   'bug-hunt': {
     title: 'Bug Hunt Challenge',
     icon: '🔍',
+    image: 'game-names/round4-bug-hunt.png',
     description: 'Work together as a QA team to inspect a website, identify defects, and prepare a professional Bug Report.',
     tags: ['Teamwork', 'Live Site Review', 'Reporting'],
     mode: 'task-timer',
@@ -101,6 +105,7 @@ const gameData = {
   'decode-clues': {
     title: 'Decode the Clues',
     icon: '🧩',
+    image: 'game-names/round5-decode-clues.png',
     description: 'Analyze the clues carefully and identify the correct answer before the other teams.',
     tags: ['Deduction', 'Buzzer Mode', 'Clue Chain'],
     mode: 'buzzer-clue',
@@ -127,6 +132,7 @@ const gameData = {
   'mystery-box': {
     title: 'Mystery Box Challenge',
     icon: '📦',
+    image: 'game-names/round6-mystery-box.png',
     description: 'Open the Box. Connect the Words. Tell the Story. Test creativity, communication, and storytelling.',
     tags: ['Creativity', 'Storytelling', 'Team Prep'],
     mode: 'mystery-box',
@@ -386,8 +392,9 @@ const activeTimers = new Set();
 
 const screens = document.querySelectorAll('.screen');
 const detailIcon = document.getElementById('detail-icon');
+const detailBanner = document.getElementById('detail-banner');
+const detailVisual = document.getElementById('detail-visual');
 const detailTitle = document.getElementById('detail-title');
-const detailDescription = document.getElementById('detail-description');
 const rulesTitle = document.getElementById('rules-title');
 const rulesList = document.getElementById('rules-list');
 const gameTitle = document.getElementById('game-title');
@@ -1061,8 +1068,16 @@ function openGame(gameKey) {
   selectedGame = gameKey;
   const data = gameData[gameKey];
   detailIcon.textContent = data.icon;
+  if (data.image) {
+    detailBanner.src = data.image;
+    detailBanner.alt = data.title;
+    detailBanner.style.display = 'block';
+    detailVisual.style.display = 'none';
+  } else {
+    detailBanner.style.display = 'none';
+    detailVisual.style.display = 'grid';
+  }
   detailTitle.textContent = data.title;
-  detailDescription.textContent = data.description;
   detailTitle.classList.remove('cinematic-title');
   void detailTitle.offsetWidth;
   detailTitle.classList.add('cinematic-title');
