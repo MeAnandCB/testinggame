@@ -696,20 +696,6 @@ h1 span {
   background: rgba(255, 255, 255, 0.14);
 }
 
-.score-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  color: #e8eeff;
-  font-size: 1.1rem;
-}
-
-#score-value {
-  color: #ffe066;
-  font-size: 1.3rem;
-}
 
 /* ---- Shared timer ring (used by triage / bug hunt / mystery box) ---- */
 
@@ -1119,12 +1105,6 @@ h1 span {
 .game-over-card p {
   margin: 0;
   color: var(--muted);
-}
-
-#final-score {
-  font-size: 2.4rem;
-  color: #ffe066;
-  margin-bottom: 10px;
 }
 
 @keyframes slideIn {

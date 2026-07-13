@@ -396,8 +396,6 @@ const gameStageCard = document.getElementById('game-stage-card');
 const confettiLayer = document.getElementById('confetti-layer');
 const gameOverCard = document.getElementById('game-over-card');
 const gameOverTitle = document.getElementById('game-over-title');
-const finalScore = document.getElementById('final-score');
-const finalScoreLabel = document.getElementById('final-score-label');
 const playAgainButton = document.getElementById('play-again-btn');
 
 const modeElements = {
@@ -472,13 +470,11 @@ function flashCard(el, className) {
   setTimeout(() => el.classList.remove(className), 500);
 }
 
-function showGameOver(title, scoreText, label) {
+function showGameOver(title) {
   Object.values(modeElements).forEach((el) => {
     el.style.display = 'none';
   });
   gameOverTitle.textContent = title;
-  finalScore.textContent = scoreText;
-  finalScoreLabel.textContent = label || 'Final score';
   gameOverCard.classList.add('active');
 }
 
@@ -497,7 +493,6 @@ const mcQuestionBlock = document.getElementById('mc-question-block');
 const visualSpotlight = document.getElementById('visual-spotlight');
 const challengeQuestion = document.getElementById('challenge-question');
 const statusText = document.getElementById('status-text');
-const scoreValue = document.getElementById('score-value');
 const choiceGrid = document.getElementById('choice-grid');
 const buzzButton = document.getElementById('buzz-btn');
 const buzzLabel = document.getElementById('buzz-label');
@@ -524,7 +519,6 @@ function openBuzzerMc(gameKey) {
   mcActiveSet = roundSets[gameKey];
   mcScore = 0;
   mcCurrentRound = 0;
-  scoreValue.textContent = mcScore;
   mcRoundTotal.textContent = mcActiveSet.rounds.length;
   hideGameOver();
   mcEl.style.display = 'block';
@@ -609,7 +603,7 @@ function handleIconChoicePick(event) {
 function advanceMcRound() {
   const nextIndex = mcCurrentRound + 1;
   if (nextIndex >= mcActiveSet.rounds.length) {
-    showGameOver('Round Cleared!', mcScore);
+    showGameOver('Round Cleared!');
   } else {
     loadMcRound(nextIndex);
   }
@@ -633,7 +627,6 @@ mcRevealBtn.addEventListener('click', () => {
     flashCard(mcEl, 'shake');
     statusText.textContent = mcSelectedChoice ? 'Incorrect answer. -1 point.' : 'No selection made. -1 point.';
   }
-  scoreValue.textContent = mcScore;
 
   mcRevealBtn.style.display = 'none';
   mcNextBtn.style.display = '';
@@ -655,7 +648,7 @@ function finishMcRound(message) {
   setTimeout(() => {
     const nextIndex = mcCurrentRound + 1;
     if (nextIndex >= mcActiveSet.rounds.length) {
-      showGameOver('Round Cleared!', mcScore);
+      showGameOver('Round Cleared!');
     } else {
       loadMcRound(nextIndex);
     }
@@ -665,7 +658,6 @@ function finishMcRound(message) {
 function handleMcTimeout() {
   mcBuzzLocked = false;
   mcScore -= 1;
-  scoreValue.textContent = mcScore;
   flashCard(mcEl, 'shake');
   finishMcRound('Time is up! -1 point. Moving to the next round.');
 }
@@ -692,7 +684,6 @@ function handleMcChoiceClick(event) {
     finishMcRound('Incorrect answer. -1 point. The opportunity passes.');
   }
 
-  scoreValue.textContent = mcScore;
 }
 
 buzzButton.addEventListener('click', () => {
@@ -736,7 +727,6 @@ const severityRow = document.getElementById('severity-row');
 const priorityRow = document.getElementById('priority-row');
 const triageSubmitBtn = document.getElementById('triage-submit-btn');
 const triageStatusText = document.getElementById('triage-status-text');
-const triageScoreValue = document.getElementById('triage-score-value');
 const triageRoundCurrent = document.getElementById('triage-round-current');
 const triageRoundTotal = document.getElementById('triage-round-total');
 const triageRevealBtn = document.getElementById('triage-reveal-btn');
@@ -750,7 +740,6 @@ let triageSelectedPriority = null;
 function openTeamTimer() {
   triageScore = 0;
   triageIndex = 0;
-  triageScoreValue.textContent = triageScore;
   triageRoundTotal.textContent = bugScenarios.length;
   hideGameOver();
   triageEl.style.display = 'block';
@@ -856,7 +845,6 @@ function revealTriageAnswer(answered) {
     flashCard(triageEl, 'shake');
   }
 
-  triageScoreValue.textContent = triageScore;
 
   const nextIndex = triageIndex + 1;
   triageNextBtn.textContent = nextIndex >= bugScenarios.length ? 'Finish Round' : 'Next Question';
@@ -866,7 +854,7 @@ function revealTriageAnswer(answered) {
 triageNextBtn.addEventListener('click', () => {
   const nextIndex = triageIndex + 1;
   if (nextIndex >= bugScenarios.length) {
-    showGameOver('Triage Complete!', triageScore);
+    showGameOver('Triage Complete!');
   } else {
     loadTriageScenario(nextIndex);
   }
@@ -909,10 +897,10 @@ function loadClueQuestion(index) {
   renderClueStack();
   clueRevealBtn.disabled = clueSets[index].clues.length <= 1;
   clueRevealBtn.style.display = '';
-  clueAnswerBtn.style.display = 'none';
+  clueAnswerBtn.style.display = '';
   clueNextBtn.style.display = 'none';
   clueAnswerOverlay.classList.remove('show');
-  clueStatusText.textContent = 'Reveal clues one at a time. The answer unlocks after the final clue.';
+  clueStatusText.textContent = 'Reveal clues one at a time, or reveal the answer whenever ready.';
 }
 
 function renderClueStack() {
@@ -930,7 +918,6 @@ clueRevealBtn.addEventListener('click', () => {
   renderClueStack();
   if (clueRevealCount >= set.clues.length) {
     clueRevealBtn.style.display = 'none';
-    clueAnswerBtn.style.display = '';
     clueStatusText.textContent = 'All clues revealed. Tap Reveal Answer when ready.';
   }
 });
@@ -953,7 +940,7 @@ clueAnswerBtn.addEventListener('click', () => {
 function goToNextClueQuestion() {
   const nextIndex = clueQuestionIndex + 1;
   if (nextIndex >= clueSets.length) {
-    showGameOver('Clues Decoded!', `${clueSets.length}/${clueSets.length}`, 'Questions completed');
+    showGameOver('Clues Decoded!');
   } else {
     loadClueQuestion(nextIndex);
   }
