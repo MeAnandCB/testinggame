@@ -240,7 +240,7 @@ const bugScenarios = [
   },
   {
     text: 'Admin report shows a spelling mistake in one column name.',
-    severity: 'Minor',
+    severity: 'Trivial',
     priority: 'Low',
   },
   {
