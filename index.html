@@ -215,6 +215,7 @@
                   <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                   Open Website
                 </button>
+                <button class="secondary-btn site-launch-newtab" id="bughunt-newtab-btn">Open in new tab instead ↗</button>
               </div>
               <div class="timer-ring-wrap timer-ring-wrap-corner" id="bughunt-timer-wrap">
                 <svg class="timer-ring" viewBox="0 0 100 100">
@@ -239,6 +240,14 @@
               <p id="final-score-label">Final score</p>
               <strong id="final-score">0</strong>
               <button class="primary-btn" id="play-again-btn">Play Again</button>
+            </div>
+
+            <div class="site-frame-overlay" id="site-frame-overlay">
+              <div class="site-frame-bar">
+                <button class="ghost-btn" id="site-frame-back-btn"><span class="ghost-arrow">←</span>Back to Round</button>
+                <span class="site-frame-url">brightcart2.netlify.app</span>
+              </div>
+              <iframe id="site-frame" class="site-frame" title="Bug Hunt target site" src="about:blank"></iframe>
             </div>
             <div class="confetti-layer" id="confetti-layer"></div>
 

@@ -746,7 +746,7 @@ h1 span {
   position: fixed;
   top: 74px;
   right: 20px;
-  z-index: 15;
+  z-index: 45;
   width: 92px;
   height: 92px;
   margin: 0;
@@ -1060,6 +1060,46 @@ h1 span {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.site-launch-newtab {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  padding: 8px 14px;
+}
+
+.site-frame-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  flex-direction: column;
+  background: #0b0f24;
+}
+
+.site-frame-overlay.show {
+  display: flex;
+}
+
+.site-frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.site-frame-url {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.site-frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: white;
 }
 
 .report-done {

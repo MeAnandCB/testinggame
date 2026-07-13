@@ -984,9 +984,25 @@ const reportDone = document.getElementById('report-done');
 const bughuntRestartBtn = document.getElementById('bughunt-restart-btn');
 const bughuntNextBtn = document.getElementById('bughunt-next-btn');
 const bughuntFullscreenBtn = document.getElementById('bughunt-fullscreen-btn');
+const bughuntNewTabBtn = document.getElementById('bughunt-newtab-btn');
+const siteFrameOverlay = document.getElementById('site-frame-overlay');
+const siteFrame = document.getElementById('site-frame');
+const siteFrameBackBtn = document.getElementById('site-frame-back-btn');
+
+const BUG_HUNT_SITE_URL = 'https://brightcart2.netlify.app';
 
 bughuntFullscreenBtn.addEventListener('click', () => {
-  window.open('https://brightcart2.netlify.app', '_blank', 'noopener');
+  siteFrame.src = BUG_HUNT_SITE_URL;
+  siteFrameOverlay.classList.add('show');
+});
+
+siteFrameBackBtn.addEventListener('click', () => {
+  siteFrameOverlay.classList.remove('show');
+  siteFrame.src = 'about:blank';
+});
+
+bughuntNewTabBtn.addEventListener('click', () => {
+  window.open(BUG_HUNT_SITE_URL, '_blank', 'noopener');
 });
 
 function openTaskTimer() {
