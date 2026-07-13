@@ -985,24 +985,35 @@ const bughuntRestartBtn = document.getElementById('bughunt-restart-btn');
 const bughuntNextBtn = document.getElementById('bughunt-next-btn');
 const bughuntFullscreenBtn = document.getElementById('bughunt-fullscreen-btn');
 const bughuntNewTabBtn = document.getElementById('bughunt-newtab-btn');
+const bughuntTimerWrap = document.getElementById('bughunt-timer-wrap');
 const siteFrameOverlay = document.getElementById('site-frame-overlay');
 const siteFrame = document.getElementById('site-frame');
 const siteFrameBackBtn = document.getElementById('site-frame-back-btn');
 
 const BUG_HUNT_SITE_URL = 'https://brightcart2.netlify.app';
+let bughuntObservationStarted = false;
 
-bughuntFullscreenBtn.addEventListener('click', () => {
+function launchBugHuntSite() {
   siteFrame.src = BUG_HUNT_SITE_URL;
   siteFrameOverlay.classList.add('show');
+  if (!bughuntObservationStarted) {
+    bughuntObservationStarted = true;
+    startObservationCountdown();
+  }
+}
+
+bughuntFullscreenBtn.addEventListener('click', launchBugHuntSite);
+bughuntNewTabBtn.addEventListener('click', () => {
+  window.open(BUG_HUNT_SITE_URL, '_blank', 'noopener');
+  if (!bughuntObservationStarted) {
+    bughuntObservationStarted = true;
+    startObservationCountdown();
+  }
 });
 
 siteFrameBackBtn.addEventListener('click', () => {
   siteFrameOverlay.classList.remove('show');
   siteFrame.src = 'about:blank';
-});
-
-bughuntNewTabBtn.addEventListener('click', () => {
-  window.open(BUG_HUNT_SITE_URL, '_blank', 'noopener');
 });
 
 function openTaskTimer() {
@@ -1012,14 +1023,22 @@ function openTaskTimer() {
 }
 
 function startObservationPhase() {
+  bughuntObservationStarted = false;
   bughuntPhaseLabel.style.display = '';
   bughuntPhaseLabel.textContent = 'Observation Phase';
   miniSite.style.display = 'block';
   reportDone.style.display = 'none';
   bughuntStatusText.style.display = '';
-  bughuntStatusText.textContent = 'Observe the site closely — you have 2 minutes.';
+  bughuntStatusText.textContent = 'Tap Open Website to begin the 2-minute observation.';
   bughuntNextBtn.style.display = '';
   reportSubmitBtn.style.display = 'none';
+  bughuntTimerWrap.style.display = 'none';
+  bughuntTime.textContent = '2:00';
+}
+
+function startObservationCountdown() {
+  bughuntTimerWrap.style.display = 'grid';
+  bughuntStatusText.textContent = 'Observe the site closely — you have 2 minutes.';
 
   startCountdown({
     seconds: 120,
@@ -1027,7 +1046,9 @@ function startObservationPhase() {
     valueEl: bughuntTime,
     circumference: RING_CIRCUMFERENCE,
     clockFormat: true,
-    onDone: startDiscussionPhase,
+    onDone: () => {
+      bughuntStatusText.textContent = "Time's up! Tap Next: Discussion to continue.";
+    },
   });
 }
 
